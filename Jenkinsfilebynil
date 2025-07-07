@@ -1,0 +1,27 @@
+pipeline {
+    agent any
+    tools{
+        jdk 'java17'
+        maven 'maven3'
+    }
+    stages {
+        stage('git code download') {
+            steps {
+                echo "Download code from git"
+                git 'https://github.com/nil7405/maven-project.git'
+            }
+        }
+        stage('build') {
+            steps {
+                echo "building java project"
+                sh 'mvn clean package'
+            }
+        }
+        stage('archive artifacts') {
+            steps {
+                echo "archiving artifacts"
+                archiveArtifacts artifacts: '**/*.war', followSymlinks: false
+            }
+        }
+    }
+}
